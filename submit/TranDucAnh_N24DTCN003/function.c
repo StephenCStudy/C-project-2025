@@ -306,19 +306,27 @@ void deleteCategory() {
     char id[10];                
     printf("                           Enter the id of the category to delete: ");              
     scanf("%s", id);                                           // cho nguoi dung nhap id muon xoa.
-    
+    getchar();
     int index = findCategoryByID(id);                  // vi tri la id duoc tim thay trong file bang ham findCategoryByID.
     if (index == -1) {
         printf("                           Category ID does not exist.\n");       // khong tim thay ( cho vitri = -1, no la gia tri khong xac dinh)
         return;
     }
-
-    for (int i = index; i < category_count - 1; i++) {     // chay tu vitri ma id muon xoa den cuoi gia tri trong file.
-        categories[i] = categories[i + 1];             // cho gia tri cua categories[i] tang len 1 don vi de thay the vitri mak id cu ton tai
-    }
-    category_count--;   // giam di so phan tu ton tai trong file
-    saveCategories();
-    printf("                           Category deleted successfully.\n");
+    char confirm; // bien xac nhan lua chon Y/N
+    printf("                           Are you want to delete this category (Y/N): ");
+    scanf("%c", &confirm);
+    
+    if(confirm == 'Y' || confirm == 'y'){
+		for (int i = index; i < category_count - 1; i++) {     // chay tu vitri ma id muon xoa den cuoi gia tri trong file.
+		        categories[i] = categories[i + 1];             // cho gia tri cua categories[i] tang len 1 don vi de thay the vitri mak id cu ton tai
+		    }
+		    category_count--;   // giam di so phan tu ton tai trong file
+		    saveCategories();
+		    printf("                           Category deleted successfully.\n");
+	}else{
+		printf("                           \nCategory deletion cancelled.\n");
+	}
+    
 }
 //----------------------------------------------------tim kiem danh muc theo id-----------------------------------------------------------------------
 
@@ -395,10 +403,10 @@ void sortCategories() {
 // int indexCategory giup ham bo qua kiem tra danh muc o vi tri do. khong con la kiem tra tinh duy nhat (unique)
 int checkInputData(char* id, char* name,int indexCategory) {
 	loadCategories();
-    if (strlen(id) == 0 || strlen(name) == 0) { // Kiem tra ID và ten khong duoc empty
+    if (strlen(id) == 0 || strlen(name) == 0) { // Kiem tra ID vÃ  ten khong duoc empty
         printf("                           ID and Name cannot be empty. Please enter again.\n");
         return 0;
-    } else if (!isValidLength(id) || !isValidLength(name)) { // Kiem tra do dai hop le cua tên, ID
+    } else if (!isValidLength(id) || !isValidLength(name)) { // Kiem tra do dai hop le cua tÃªn, ID
         printf("                           ID and Name must have valid length. Please enter again.\n");
         return 0;
     } else if (!isUniqueID(id, indexCategory) || !isUniqueName(name, indexCategory)) { // Kiem tra ID va ten la duy nhat
